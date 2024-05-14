@@ -1,12 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const { createConnection } = require('mysql');
+const { createConnection } = require('mysql2');
 
 app.use(cors());
 
 const lojaHardwareCONN = createConnection({
-    host: 'root',
+    host: 'localhost',
     user: 'root',
     password: 'admin',
     database: 'estudos_pedro'
@@ -14,7 +14,7 @@ const lojaHardwareCONN = createConnection({
 
 //Consulta para produtos
 app.get('/store', (req, res) => {
-    lojaHardwareCONN.query('SELECT * FROM pedidos_hardware', (error, results) => {
+    lojaHardwareCONN.query('SELECT * FROM produtos_hardware', (error, results) => {
         if (error) throw error;
         res.json(results);
     });
