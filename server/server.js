@@ -13,7 +13,7 @@ const lojaHardwareCONN = createConnection({
 });
 
 //Consulta para produtos
-app.get('/store', (req, res) => {
+app.get('/', (req, res) => {
     lojaHardwareCONN.query('SELECT * FROM produtos_hardware', (error, results) => {
         if (error) throw error;
         res.json(results);
