@@ -12,9 +12,9 @@ const lojaHardwareCONN = createConnection({
     database: 'estudos_pedro'
 });
 
-//Consulta para produtos
+//Consulta para produtos ativos
 app.get('/', (req, res) => {
-    lojaHardwareCONN.query('SELECT * FROM produtos_hardware', (error, results) => {
+    lojaHardwareCONN.query('SELECT * FROM produtos_hardware WHERE ativo = 1', (error, results) => {
         if (error) throw error;
         res.json(results);
     });
