@@ -3,7 +3,7 @@
     align-items: center;
     justify-content: center;
     gap: 50px;
-    background-color: crimson;
+    background-color: rgb(37, 37, 37);
     padding: 20px;
     margin-bottom: 70px;
 }
@@ -16,4 +16,9 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+.exit_p {
+    color: red;
+    cursor: pointer;
 }
