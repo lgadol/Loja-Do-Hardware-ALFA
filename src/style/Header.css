@@ -1,0 +1,18 @@
+.header_div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    background-color: crimson;
+    padding: 20px;
+    margin-bottom: 70px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+a:hover {
+    text-decoration: underline;
+}

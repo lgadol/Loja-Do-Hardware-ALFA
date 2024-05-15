@@ -1,0 +1,35 @@
+/* Página Store e Cart */
+
+.product_area {
+    display: flex;
+    gap: 50px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 70px;
+}
+
+.product_div {
+    height: 320px;
+    width: 230px;
+    border: 1px solid rgb(194, 193, 193);
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.img_product {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.product_button {
+    font-size: 20px;
+    background: transparent;
+    border: none;
+    color: crimson;
+    cursor: pointer;
+}

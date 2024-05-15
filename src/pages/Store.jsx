@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { BsFillCartPlusFill, BsFillCartCheckFill } from 'react-icons/bs';
 import { getItem, setItem } from '../services/LocalStorageFuncs';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import '../style/Global.css';
+import { Header } from '../components/Header';
 
 export const Store = () => {
 
@@ -38,17 +40,16 @@ export const Store = () => {
 
     return (
         <div>
-            <Link to='/cart'>Carrinho</Link>
-            <h1>Loja</h1>
-            <div>
+            <Header />
+            <div className='product_area'>
                 {
                     data.map((e) => (
-                        <div key={e.id}>
+                        <div key={e.id} className='product_div'>
                             <h4>{e.nome}</h4>
-                            <img src={e.imagem_url} alt="" />
-                            <h3>{e.preco}</h3>
-                            <p>{e.descricao}</p>
-                            <button
+                            <img className="img_product" src={e.imagem_url} alt="" />
+                            <h3>{parseFloat(e.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</h3>
+                            {/* <p class="description_product">{e.descricao}</p> */}
+                            <button className='product_button'
                                 onClick={() => handleClick(e)}
                             >
                                 {
