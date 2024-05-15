@@ -31,6 +31,7 @@ export const Login = () => {
             if (user.senha === pass) {
                 if (user.ativo === 1) {
                     localStorage.setItem('userToken', 'loggedIn');
+                    localStorage.setItem('userId', user.id);
                     localStorage.setItem('userName', user.nome);
                     localStorage.setItem('isAdmin', user.admin);
                     history.push("/");
