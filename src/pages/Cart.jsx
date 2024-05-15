@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { getItem, setItem } from '../services/LocalStorageFuncs';
 import { BsFillCartDashFill } from 'react-icons/bs';
-import '../style/Global.css';
 import { Header } from '../components/Header';
+import '../style/Global.css';
 
 export const Cart = () => {
     const [data, setData] = useState(getItem('carrinhoYt') || []);
@@ -13,12 +13,13 @@ export const Cart = () => {
         setItem('carrinhoYt', arrFilter);
     }
 
-    const subTotal = data.reduce((acc, cur) => acc + cur.price ,0)
+    const subTotal = data.reduce((acc, cur) => acc + parseFloat(cur.preco) ,0);
+    const subTotalConvert = parseFloat(subTotal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 
     return (
         <div>
             <Header />
-            <h3>{`Subtotal: ${subTotal}`}</h3>
+            <h3>{`SubTotal: ${subTotalConvert}`}</h3>
             <div className='product_area'>
                 {
                     data.map((e) => (

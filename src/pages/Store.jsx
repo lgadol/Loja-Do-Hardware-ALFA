@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { BsFillCartPlusFill, BsFillCartCheckFill } from 'react-icons/bs';
 import { getItem, setItem } from '../services/LocalStorageFuncs';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
-import '../style/Global.css';
 import { Header } from '../components/Header';
+import '../style/Global.css';
 
 export const Store = () => {
 
