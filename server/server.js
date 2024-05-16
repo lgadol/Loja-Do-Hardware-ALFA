@@ -167,6 +167,18 @@ app.get('/cart/:id_usuario', (req, res) => {
     });
 });
 
+// Desativar um produto
+app.put('/product/:id', (req, res) => {
+    const { id } = req.params;
+    const { ativo } = req.body;
+
+    const queryUpdate = 'UPDATE produtos_hardware SET ativo = ? WHERE id = ?';
+    lojaHardwareCONN.query(queryUpdate, [ativo, id], (error, results) => {
+        if (error) throw error;
+        res.json({ message: 'Produto atualizado com sucesso' });
+    });
+});
+
 
 app.listen(4000, () => {
     console.log('API rodando na porta 4000');

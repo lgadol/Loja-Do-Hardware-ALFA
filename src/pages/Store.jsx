@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { BsFillCartPlusFill, BsFillCartCheckFill } from 'react-icons/bs';
+import { BsFillCartPlusFill, BsTrash3Fill } from 'react-icons/bs';
 import { getItem, setItem } from '../services/LocalStorageFuncs';
 import { Header } from '../components/Header';
 import '../style/Global.css';
+import { toast } from 'react-toastify';
 
 export const Store = () => {
     const [data, setData] = useState([]);
     const [cart, setCart] = useState(getItem('carrinhoYt') || []);
     const [quantities, setQuantities] = useState({});
 
-    useEffect(() => {
-        const fetchApi = async () => {
-            try {
-                const url = 'http://localhost:4000/';
-                const response = await fetch(url);
-                const data = await response.json();
-                setData(data);
-            } catch (error) {
-                console.error("Erro ao buscar os dados: ", error);
-            }
+    const fetchApi = async () => {
+        try {
+            const url = 'http://localhost:4000/';
+            const response = await fetch(url);
+            const data = await response.json();
+            setData(data);
+        } catch (error) {
+            console.error("Erro ao buscar os dados: ", error);
         }
+    }
+
+    useEffect(() => {
         fetchApi();
     }, [])
 
@@ -51,6 +53,36 @@ export const Store = () => {
         });
     }
 
+    const handleDelete = async (obj) => {
+        const confirmation = window.confirm("Você quer excluir este produto?");
+        if (confirmation) {
+            const userId = localStorage.getItem('userId');
+            const response = await fetch(`http://localhost:4000/product/${obj.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id_usuario: userId,
+                    ativo: 0,
+                }),
+            });
+
+            if (response.ok) {
+                toast.success("Produto excluído com sucesso!", {
+                    position: "bottom-right",
+                    autoClose: 2000
+                });
+                fetchApi();
+            } else {
+                toast.error("Erro ao excluir o produto.", {
+                    position: "bottom-right",
+                    autoClose: 2000
+                });
+            }
+        }
+    }
+
     return (
         <div>
             <Header />
@@ -58,6 +90,7 @@ export const Store = () => {
                 {
                     data.map((e) => (
                         <div key={e.id} className='product_div'>
+                            {localStorage.getItem('isAdmin') === '1' && <BsTrash3Fill color='red' onClick={() => handleDelete(e)} />}
                             <h4>{e.nome}</h4>
                             <img className="img_product" src={e.imagem_url} alt="" />
                             <h3>{parseFloat(e.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</h3>
@@ -69,7 +102,7 @@ export const Store = () => {
                                     onChange={(event) => handleQuantityChange(e.id, event.target.value)}
                                 />
                                 <button className='product_button' onClick={() => handleClick(e)}>
-                                    <BsFillCartPlusFill  color='green'/>
+                                    <BsFillCartPlusFill color='green' />
                                 </button>
                             </div>
                         </div>
