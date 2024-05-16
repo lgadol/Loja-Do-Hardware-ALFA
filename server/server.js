@@ -42,6 +42,81 @@ app.get('/users/:id', (req, res) => {
     });
 });
 
+// Atualizar um usuário
+app.put('/users/:id', (req, res) => {
+    const { id } = req.params;
+    const { usuario, nome, email, cpf, senha, rua, bairro, numero, cep, cidade, estado } = req.body;
+
+    // Verificar se o nome de usuário já existe
+    lojaHardwareCONN.query('SELECT * FROM usuarios_hardware WHERE usuario = ? AND id != ?', [usuario, id], (error, results) => {
+        if (error) throw error;
+
+        if (results.length > 0) {
+            // Nome de usuário já existe
+            res.status(400).json({ message: 'Nome de usuário já existe' });
+        } else {
+            // Verificar se o e-mail já existe
+            lojaHardwareCONN.query('SELECT * FROM usuarios_hardware WHERE email = ? AND id != ?', [email, id], (error, results) => {
+                if (error) throw error;
+
+                if (results.length > 0) {
+                    // E-mail já existe
+                    res.status(400).json({ message: 'E-mail já existe' });
+                } else {
+                    // Verificar se o CPF já existe
+                    lojaHardwareCONN.query('SELECT * FROM usuarios_hardware WHERE cpf = ? AND id != ?', [cpf, id], (error, results) => {
+                        if (error) throw error;
+
+                        if (results.length > 0) {
+                            // CPF já existe
+                            res.status(400).json({ message: 'CPF já existe' });
+                        } else {
+                            // Atualizar o usuário
+                            const queryUpdate = 'UPDATE usuarios_hardware SET usuario = ?, nome = ?, email = ?, cpf = ?, senha = ?, rua = ?, bairro = ?, numero = ?, cep = ?, cidade = ?, estado = ? WHERE id = ?';
+                            lojaHardwareCONN.query(queryUpdate, [usuario, nome, email, cpf, senha, rua, bairro, numero, cep, cidade, estado, id], (error, results) => {
+                                if (error) throw error;
+                                res.json({ message: 'Usuário atualizado com sucesso' });
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+});
+
+// Verificar a senha do usuário
+app.post('/checkPassword/:id', (req, res) => {
+    const { id } = req.params;
+    const { password } = req.body;
+
+    lojaHardwareCONN.query('SELECT * FROM usuarios_hardware WHERE id = ?', [id], (error, results) => {
+        if (error) throw error;
+
+        if (results.length > 0) {
+            const user = results[0];
+
+            // Senha em texto simples (o que não é recomendado), feito assim:
+            if (user.senha === password) {
+                res.json({ message: 'Senha correta' });
+            } else {
+                res.status(401).json({ message: 'Senha incorreta' });
+            }
+
+            // Senha usando bcrypt, é feito assim:
+            // bcrypt.compare(password, user.senha, function(err, result) {
+            //     if (result == true) {
+            //         res.json({ message: 'Senha correta' });
+            //     } else {
+            //         res.status(401).json({ message: 'Senha incorreta' });
+            //     }
+            // });
+        } else {
+            res.status(404).json({ message: 'Usuário não encontrado' });
+        }
+    });
+});
+
 // Adicionar item ao carrinho
 app.post('/cart', (req, res) => {
     const { id_usuario, id_produto, quantidade } = req.body;
