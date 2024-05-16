@@ -1,19 +1,35 @@
-import React, { useState } from 'react';
-import { getItem, setItem } from '../services/LocalStorageFuncs';
+import React, { useState, useEffect } from 'react';
 import { BsFillCartDashFill } from 'react-icons/bs';
 import { Header } from '../components/Header';
 import '../style/Global.css';
 
 export const Cart = () => {
-    const [data, setData] = useState(getItem('carrinhoYt') || []);
+    const [data, setData] = useState([]);
 
-    const removeItem = (obj) => {
-        const arrFilter = data.filter((e) => e.id !== obj.id)
-        setData(arrFilter);
-        setItem('carrinhoYt', arrFilter);
+    const fetchCart = async () => {
+        const userId = localStorage.getItem('userId');
+        const response = await fetch(`http://localhost:4000/cart/${userId}`);
+        if (response.ok) {
+            const cartData = await response.json();
+            setData(cartData);
+        } else {
+            console.error('Erro ao buscar os dados do carrinho: ', await response.json());
+        }
     }
 
-    const subTotal = data.reduce((acc, cur) => acc + parseFloat(cur.preco), 0);
+    useEffect(() => {
+        fetchCart();
+    }, []);
+
+    const removeItem = async (obj) => {
+        await fetch(`http://localhost:4000/cart/${obj.id}`, {
+            method: 'DELETE',
+        });
+
+        fetchCart();
+    }
+
+    const subTotal = data.reduce((acc, cur) => acc + parseFloat(cur.preco) * cur.quantidade, 0);
     const subTotalConvert = parseFloat(subTotal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 
     return (
@@ -27,11 +43,11 @@ export const Cart = () => {
                             <h4>{e.nome}</h4>
                             <img className="img_product" src={e.imagem_url} alt="" />
                             <h3>{parseFloat(e.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</h3>
-                            {/* <p class="description_product">{e.descricao}</p> */}
+                            <h3>Quantidade: {e.quantidade}</h3>
                             <button className='product_button'
                                 onClick={() => removeItem(e)}
                             >
-                                <BsFillCartDashFill />
+                                <BsFillCartDashFill color='red'/>
                             </button>
                         </div>
                     ))

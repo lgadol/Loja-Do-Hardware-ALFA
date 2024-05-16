@@ -45,17 +45,33 @@ app.get('/users/:id', (req, res) => {
 // Adicionar item ao carrinho
 app.post('/cart', (req, res) => {
     const { id_usuario, id_produto, quantidade } = req.body;
-    const query = 'INSERT INTO carrinho (id_usuario, id_produto, quantidade) VALUES (?, ?, ?)';
-    lojaHardwareCONN.query(query, [id_usuario, id_produto, quantidade], (error, results) => {
+    const queryCheck = 'SELECT * FROM carrinho_hardware WHERE id_usuario = ? AND id_produto = ?';
+    const queryInsert = 'INSERT INTO carrinho_hardware (id_usuario, id_produto, quantidade) VALUES (?, ?, ?)';
+    const queryUpdate = 'UPDATE carrinho_hardware SET quantidade = quantidade + ? WHERE id_usuario = ? AND id_produto = ?';
+
+    lojaHardwareCONN.query(queryCheck, [id_usuario, id_produto], (error, results) => {
         if (error) throw error;
-        res.json({ message: 'Item adicionado ao carrinho' });
+
+        if (results.length > 0) {
+            // Item já está no carrinho, atualizar quantidade
+            lojaHardwareCONN.query(queryUpdate, [quantidade, id_usuario, id_produto], (error, results) => {
+                if (error) throw error;
+                res.json({ message: 'Quantidade atualizada no carrinho' });
+            });
+        } else {
+            // Item não está no carrinho, inserir nova entrada
+            lojaHardwareCONN.query(queryInsert, [id_usuario, id_produto, quantidade], (error, results) => {
+                if (error) throw error;
+                res.json({ message: 'Item adicionado ao carrinho' });
+            });
+        }
     });
 });
 
 // Remover item do carrinho
 app.delete('/cart/:id', (req, res) => {
     const { id } = req.params;
-    lojaHardwareCONN.query('DELETE FROM carrinho WHERE id = ?', [id], (error, results) => {
+    lojaHardwareCONN.query('DELETE FROM carrinho_hardware WHERE id = ?', [id], (error, results) => {
         if (error) throw error;
         res.json({ message: 'Item removido do carrinho' });
     });
@@ -64,11 +80,18 @@ app.delete('/cart/:id', (req, res) => {
 // Obter todos os itens no carrinho de um usuário específico
 app.get('/cart/:id_usuario', (req, res) => {
     const { id_usuario } = req.params;
-    lojaHardwareCONN.query('SELECT * FROM carrinho WHERE id_usuario = ?', [id_usuario], (error, results) => {
+    const query = `
+        SELECT carrinho_hardware.*, produtos_hardware.nome, produtos_hardware.imagem_url, produtos_hardware.preco, produtos_hardware.descricao
+        FROM carrinho_hardware
+        JOIN produtos_hardware ON carrinho_hardware.id_produto = produtos_hardware.id
+        WHERE carrinho_hardware.id_usuario = ?
+    `;
+    lojaHardwareCONN.query(query, [id_usuario], (error, results) => {
         if (error) throw error;
         res.json(results);
     });
 });
+
 
 app.listen(4000, () => {
     console.log('API rodando na porta 4000');
