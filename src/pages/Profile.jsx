@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Header } from '../components/Header'
 import { toast } from 'react-toastify';
 import '../style/Global.css'
+import { EstadosBrasileiros } from '../services/Vars';
 
 export const Profile = () => {
     const [user, setUser] = useState(null);
@@ -166,7 +167,7 @@ export const Profile = () => {
                             <input
                                 type="text"
                                 name="nome"
-                                value={editedUser.nome}
+                                value={editedUser.nome.toUpperCase()}
                                 onChange={handleInputChange}
                             />
                             <input
@@ -184,13 +185,13 @@ export const Profile = () => {
                             <input
                                 type="text"
                                 name="rua"
-                                value={editedUser.rua}
+                                value={editedUser.rua.toUpperCase()}
                                 onChange={handleInputChange}
                             />
                             <input
                                 type="text"
                                 name="bairro"
-                                value={editedUser.bairro}
+                                value={editedUser.bairro.toUpperCase()}
                                 onChange={handleInputChange}
                             />
                             <input
@@ -208,12 +209,10 @@ export const Profile = () => {
                             <input
                                 type="text"
                                 name="cidade"
-                                value={editedUser.cidade}
+                                value={editedUser.cidade.toUpperCase()}
                                 onChange={handleInputChange}
                             />
-                            <input
-                                type="text"
-                                name="estado"
+                            <EstadosBrasileiros
                                 value={editedUser.estado}
                                 onChange={handleInputChange}
                             />
