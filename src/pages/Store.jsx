@@ -5,9 +5,9 @@ import { Header } from '../components/Header';
 import '../style/Global.css';
 
 export const Store = () => {
-
     const [data, setData] = useState([]);
     const [cart, setCart] = useState(getItem('carrinhoYt') || []);
+    const [quantities, setQuantities] = useState({});
 
     useEffect(() => {
         const fetchApi = async () => {
@@ -23,18 +23,32 @@ export const Store = () => {
         fetchApi();
     }, [])
 
-    const handleClick = (obj) => {
+    const handleQuantityChange = (id, quantity) => {
+        setQuantities({
+            ...quantities,
+            [id]: quantity,
+        });
+    };
 
-        const element = cart.find((e) => e.id === obj.id);
+    const handleClick = async (obj) => {
+        const userId = localStorage.getItem('userId');
+        const quantity = quantities[obj.id] || 1;
 
-        if (element) {
-            const arrFilter = cart.filter((e) => e.id !== obj.id);
-            setCart(arrFilter);
-            setItem('carrinhoYt', arrFilter);
-        } else {
-            setCart([...cart, obj]);
-            setItem('carrinhoYt', [...cart, obj]);
-        }
+        setCart([...cart, obj]);
+        setItem('carrinhoYt', [...cart, obj]);
+
+        // Adicionar item ao carrinho no banco de dados
+        await fetch('http://localhost:4000/cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id_usuario: userId,
+                id_produto: obj.id,
+                quantidade: quantity,
+            }),
+        });
     }
 
     return (
@@ -47,18 +61,17 @@ export const Store = () => {
                             <h4>{e.nome}</h4>
                             <img className="img_product" src={e.imagem_url} alt="" />
                             <h3>{parseFloat(e.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</h3>
-                            {/* <p class="description_product">{e.descricao}</p> */}
-                            <button className='product_button'
-                                onClick={() => handleClick(e)}
-                            >
-                                {
-                                    cart.some((itemCart) => itemCart.id === e.id) ? (
-                                        <BsFillCartCheckFill />
-                                    ) : (
-                                        <BsFillCartPlusFill />
-                                    )
-                                }
-                            </button>
+                            <div className='cart_div'>
+                                <input className='cartQuanty_input'
+                                    type="number"
+                                    min="1"
+                                    value={quantities[e.id] || ''}
+                                    onChange={(event) => handleQuantityChange(e.id, event.target.value)}
+                                />
+                                <button className='product_button' onClick={() => handleClick(e)}>
+                                    <BsFillCartPlusFill  />
+                                </button>
+                            </div>
                         </div>
                     ))
                 }

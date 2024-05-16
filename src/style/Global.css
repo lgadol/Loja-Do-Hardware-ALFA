@@ -35,4 +35,15 @@
     cursor: pointer;
 }
 
+.cartQuanty_input {
+    width: 30px;
+    border-color: green;
+    border-radius: 5px;
+}
+
+.cart_div {
+    justify-content: center;
+    display: flex;
+}
+
 /* Página Login */

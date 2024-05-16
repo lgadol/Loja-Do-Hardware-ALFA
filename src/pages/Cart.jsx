@@ -13,7 +13,7 @@ export const Cart = () => {
         setItem('carrinhoYt', arrFilter);
     }
 
-    const subTotal = data.reduce((acc, cur) => acc + parseFloat(cur.preco) ,0);
+    const subTotal = data.reduce((acc, cur) => acc + parseFloat(cur.preco), 0);
     const subTotalConvert = parseFloat(subTotal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 
     return (
