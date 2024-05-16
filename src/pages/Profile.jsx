@@ -37,7 +37,7 @@ export const Profile = () => {
                 }
                 break;
             case 'nome':
-                if (value.length > 50 || /[^a-zA-Z0-9]/.test(value)) {
+                if (value.length > 50 || /[^a-zA-Z\s]/.test(value)) {
                     errorMessage = 'O nome não pode ter mais de 50 caracteres ou conter caracteres especiais';
                 }
                 break;
@@ -52,12 +52,12 @@ export const Profile = () => {
                 }
                 break;
             case 'rua':
-                if (value.length > 150 || /[^a-zA-Z]/.test(value)) {
+                if (value.length > 150 || /[^a-zA-Z\s]/.test(value)) {
                     errorMessage = 'A rua não pode ter mais de 150 caracteres e só pode conter letras';
                 }
                 break;
             case 'bairro':
-                if (value.length > 50 || /[^a-zA-Z0-9]/.test(value)) {
+                if (value.length > 50 || /[^a-zA-Z\s]/.test(value)) {
                     errorMessage = 'O bairro não pode ter mais de 50 caracteres ou conter caracteres especiais';
                 }
                 break;
@@ -72,7 +72,7 @@ export const Profile = () => {
                 }
                 break;
             case 'cidade':
-                if (value.length > 150 || /[^a-zA-Z]/.test(value)) {
+                if (value.length > 150 || /[^a-zA-Z\s]/.test(value)) {
                     errorMessage = 'A cidade não pode ter mais de 150 caracteres e só pode conter letras';
                 }
                 break;
