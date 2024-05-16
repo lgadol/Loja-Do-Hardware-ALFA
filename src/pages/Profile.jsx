@@ -27,10 +27,70 @@ export const Profile = () => {
     }, []);
 
     const handleInputChange = (event) => {
-        setEditedUser({
-            ...editedUser,
-            [event.target.name]: event.target.value,
-        });
+        const { name, value } = event.target;
+        let errorMessage = '';
+
+        switch (name) {
+            case 'usuario':
+                if (value.length > 20 || /[^a-zA-Z0-9]/.test(value)) {
+                    errorMessage = 'O usuário não pode ter mais de 20 caracteres ou conter caracteres especiais';
+                }
+                break;
+            case 'nome':
+                if (value.length > 50 || /[^a-zA-Z0-9]/.test(value)) {
+                    errorMessage = 'O nome não pode ter mais de 50 caracteres ou conter caracteres especiais';
+                }
+                break;
+            case 'email':
+                if (value.length > 50) {
+                    errorMessage = 'O email não pode ter mais de 50 caracteres';
+                }
+                break;
+            case 'cpf':
+                if (value.length > 11 || /\D/.test(value)) {
+                    errorMessage = 'O CPF não pode ter mais de 11 caracteres e só pode conter números';
+                }
+                break;
+            case 'rua':
+                if (value.length > 150 || /[^a-zA-Z]/.test(value)) {
+                    errorMessage = 'A rua não pode ter mais de 150 caracteres e só pode conter letras';
+                }
+                break;
+            case 'bairro':
+                if (value.length > 50 || /[^a-zA-Z0-9]/.test(value)) {
+                    errorMessage = 'O bairro não pode ter mais de 50 caracteres ou conter caracteres especiais';
+                }
+                break;
+            case 'numero':
+                if (value.length > 20 || /\D/.test(value)) {
+                    errorMessage = 'O número não pode ter mais de 20 caracteres e só pode conter números';
+                }
+                break;
+            case 'cep':
+                if (value.length > 8 || /\D/.test(value)) {
+                    errorMessage = 'O CEP não pode ter mais de 8 caracteres e só pode conter números';
+                }
+                break;
+            case 'cidade':
+                if (value.length > 150 || /[^a-zA-Z]/.test(value)) {
+                    errorMessage = 'A cidade não pode ter mais de 150 caracteres e só pode conter letras';
+                }
+                break;
+            default:
+                break;
+        }
+
+        if (errorMessage) {
+            toast.error(errorMessage, {
+                position: "bottom-right",
+                autoClose: 2000
+            });
+        } else {
+            setEditedUser({
+                ...editedUser,
+                [name]: value,
+            });
+        }
     };
 
     const handlePasswordChange = (event) => {
