@@ -10,7 +10,7 @@ LOJA DO HARDWARE (Alfa)
 ## Como Iniciar a Aplicação
 1. Clone o repositório para a sua máquina local usando 'git clone https://github.com/lgadol/Loja-Do-Hardware-ALFA'.
 2. Navegue até a pasta do projeto usando 'cd loja_do_hardware-ALFA'.
-3. Instale todas as dependências usando 'npm install'.
+3. Instale todas as dependências usando 'npm run install:both'.
 
 ## Como importar o DB (HeidiSQL)
 1. Dentro do HeidiSQL, já conectado na sua sessão.
