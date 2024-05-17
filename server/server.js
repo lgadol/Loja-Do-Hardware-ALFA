@@ -47,40 +47,52 @@ app.put('/users/:id', (req, res) => {
     const { id } = req.params;
     const { usuario, nome, email, cpf, senha, rua, bairro, numero, cep, cidade, estado } = req.body;
 
-    // Verificar se o nome de usuário já existe
+    // Atualizar o usuário
+    const queryUpdate = 'UPDATE usuarios_hardware SET usuario = ?, nome = ?, email = ?, cpf = ?, senha = ?, rua = ?, bairro = ?, numero = ?, cep = ?, cidade = ?, estado = ? WHERE id = ?';
+    lojaHardwareCONN.query(queryUpdate, [usuario, nome, email, cpf, senha, rua, bairro, numero, cep, cidade, estado, id], (error, results) => {
+        if (error) throw error;
+        res.json({ message: 'Usuário atualizado com sucesso' });
+    });
+});
+
+// Verificar se um nome de usuário já existe
+app.post('/checkUser/:id', (req, res) => {
+    const { id } = req.params;
+    const { usuario } = req.body;
     lojaHardwareCONN.query('SELECT * FROM usuarios_hardware WHERE usuario = ? AND id != ?', [usuario, id], (error, results) => {
         if (error) throw error;
-
         if (results.length > 0) {
-            // Nome de usuário já existe
             res.status(400).json({ message: 'Nome de usuário já existe' });
         } else {
-            // Verificar se o e-mail já existe
-            lojaHardwareCONN.query('SELECT * FROM usuarios_hardware WHERE email = ? AND id != ?', [email, id], (error, results) => {
-                if (error) throw error;
+            res.json({ message: 'Nome de usuário disponível' });
+        }
+    });
+});
 
-                if (results.length > 0) {
-                    // E-mail já existe
-                    res.status(400).json({ message: 'E-mail já existe' });
-                } else {
-                    // Verificar se o CPF já existe
-                    lojaHardwareCONN.query('SELECT * FROM usuarios_hardware WHERE cpf = ? AND id != ?', [cpf, id], (error, results) => {
-                        if (error) throw error;
+// Verificar se um email já existe
+app.post('/checkEmail/:id', (req, res) => {
+    const { id } = req.params;
+    const { email } = req.body;
+    lojaHardwareCONN.query('SELECT * FROM usuarios_hardware WHERE email = ? AND id != ?', [email, id], (error, results) => {
+        if (error) throw error;
+        if (results.length > 0) {
+            res.status(400).json({ message: 'E-mail já existe' });
+        } else {
+            res.json({ message: 'E-mail disponível' });
+        }
+    });
+});
 
-                        if (results.length > 0) {
-                            // CPF já existe
-                            res.status(400).json({ message: 'CPF já existe' });
-                        } else {
-                            // Atualizar o usuário
-                            const queryUpdate = 'UPDATE usuarios_hardware SET usuario = ?, nome = ?, email = ?, cpf = ?, senha = ?, rua = ?, bairro = ?, numero = ?, cep = ?, cidade = ?, estado = ? WHERE id = ?';
-                            lojaHardwareCONN.query(queryUpdate, [usuario, nome, email, cpf, senha, rua, bairro, numero, cep, cidade, estado, id], (error, results) => {
-                                if (error) throw error;
-                                res.json({ message: 'Usuário atualizado com sucesso' });
-                            });
-                        }
-                    });
-                }
-            });
+// Verificar se um CPF já existe
+app.post('/checkCpf/:id', (req, res) => {
+    const { id } = req.params;
+    const { cpf } = req.body;
+    lojaHardwareCONN.query('SELECT * FROM usuarios_hardware WHERE cpf = ? AND id != ?', [cpf, id], (error, results) => {
+        if (error) throw error;
+        if (results.length > 0) {
+            res.status(400).json({ message: 'CPF já existe' });
+        } else {
+            res.json({ message: 'CPF disponível' });
         }
     });
 });

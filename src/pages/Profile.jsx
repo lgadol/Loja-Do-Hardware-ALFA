@@ -100,7 +100,61 @@ export const Profile = () => {
 
     const handleSave = async () => {
 
-        // Verifique se a senha está correta antes de salvar
+        // Verificar se o nome de usuário já existe
+        const userCheckResponse = await fetch(`http://localhost:4000/checkUser/${user.id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ usuario: editedUser.usuario }),
+        });
+
+        if (!userCheckResponse.ok) {
+            const { message } = await userCheckResponse.json();
+            toast.error(message, {
+                position: "bottom-right",
+                autoClose: 2000
+            });
+            return;
+        }
+
+        // Verificar se o email já existe
+        const emailCheckResponse = await fetch(`http://localhost:4000/checkEmail/${user.id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: editedUser.email }),
+        });
+
+        if (!emailCheckResponse.ok) {
+            const { message } = await emailCheckResponse.json();
+            toast.error(message, {
+                position: "bottom-right",
+                autoClose: 2000
+            });
+            return;
+        }
+
+        // Verificar se o cpf já existe
+        const cpfCheckResponse = await fetch(`http://localhost:4000/checkCpf/${user.id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ cpf: editedUser.cpf }),
+        });
+
+        if (!cpfCheckResponse.ok) {
+            const { message } = await cpfCheckResponse.json();
+            toast.error(message, {
+                position: "bottom-right",
+                autoClose: 2000
+            });
+            return;
+        }
+
+        // Verificar se a senha está correta antes de salvar
         const passwordResponse = await fetch(`http://localhost:4000/checkPassword/${user.id}`, {
             method: 'POST',
             headers: {
