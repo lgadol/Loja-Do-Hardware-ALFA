@@ -2,12 +2,12 @@
 
 # dependencies
 /node_modules
-/server/node_moduless
+/server/node_modules
 /.pnp
 .pnp.js
 
 # DB Config
-.env
+/server/.env
 
 # testing
 /coverage
