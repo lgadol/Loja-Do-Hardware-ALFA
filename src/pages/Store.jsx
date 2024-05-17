@@ -35,13 +35,21 @@ export const Store = () => {
 
     const handleClick = async (obj) => {
         const userId = localStorage.getItem('userId');
-        const quantity = quantities[obj.id] || 1;
+        const quantity = quantities[obj.id] || '0';
+
+        if (quantity === '0') {
+            toast.error('O valor mínimo para adicionar é 1.', {
+                autoClose: 2000,
+                position: 'bottom-right'
+            });
+            return;
+        }
 
         setCart([...cart, obj]);
         setItem('carrinhoYt', [...cart, obj]);
 
         // Adicionar item ao carrinho no banco de dados
-        await fetch('http://localhost:4000/cart', {
+        const response = await fetch('http://localhost:4000/cart', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -49,9 +57,21 @@ export const Store = () => {
             body: JSON.stringify({
                 id_usuario: userId,
                 id_produto: obj.id,
-                quantidade: quantity,
+                quantidade: Number(quantity),
             }),
         });
+
+        if (response.ok) {
+            toast.success('Produto adicionado ao carrinho com sucesso!', {
+                autoClose: 2000,
+                position: 'bottom-right'
+            });
+        } else {
+            toast.error('Houve um problema ao adicionar o produto ao carrinho.', {
+                autoClose: 2000,
+                position: 'bottom-right'
+            });
+        }
     }
 
     const handleDelete = async (obj) => {
@@ -98,7 +118,7 @@ export const Store = () => {
                 {
                     data.map((e) => (
                         <div key={e.id} className='product_div'>
-                            {localStorage.getItem('isAdmin') === '1' && <BsTrash3Fill color='red' onClick={() => handleDelete(e)} />}
+                            <p className='trash_button'>{localStorage.getItem('isAdmin') === '1' && <BsTrash3Fill color='red' onClick={() => handleDelete(e)} />}</p>
                             <h4>{e.nome}</h4>
                             <img className="img_product" src={e.imagem_url} alt="" />
                             <h3>{parseFloat(e.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</h3>
@@ -106,7 +126,7 @@ export const Store = () => {
                                 <input className='cartQuanty_input'
                                     type="number"
                                     min="1"
-                                    value={quantities[e.id] || ''}
+                                    value={quantities[e.id] || '0'}
                                     onChange={(event) => handleQuantityChange(e.id, event.target.value)}
                                 />
                                 <button className='product_button' onClick={() => handleClick(e)}>
