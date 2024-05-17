@@ -10,7 +10,7 @@ const lojaHardwareCONN = createConnection({
     host: 'localhost',
     user: 'root',
     password: 'admin',
-    database: 'estudos_pedro'
+    database: 'loja_do_hardware'
 });
 
 //Consulta para produtos ativos
@@ -46,8 +46,6 @@ app.get('/users/:id', (req, res) => {
 app.put('/users/:id', (req, res) => {
     const { id } = req.params;
     const { usuario, nome, email, cpf, senha, rua, bairro, numero, cep, cidade, estado } = req.body;
-
-    // Atualizar o usuário
     const queryUpdate = 'UPDATE usuarios_hardware SET usuario = ?, nome = ?, email = ?, cpf = ?, senha = ?, rua = ?, bairro = ?, numero = ?, cep = ?, cidade = ?, estado = ? WHERE id = ?';
     lojaHardwareCONN.query(queryUpdate, [usuario, nome, email, cpf, senha, rua, bairro, numero, cep, cidade, estado, id], (error, results) => {
         if (error) throw error;
@@ -155,7 +153,7 @@ app.post('/cart', (req, res) => {
     });
 });
 
-// Remover item do carrinho
+// Remover específico item do carrinho
 app.delete('/cart/:id', (req, res) => {
     const { id } = req.params;
     lojaHardwareCONN.query('DELETE FROM carrinho_hardware WHERE id = ?', [id], (error, results) => {
@@ -176,6 +174,19 @@ app.get('/cart/:id_usuario', (req, res) => {
     lojaHardwareCONN.query(query, [id_usuario], (error, results) => {
         if (error) throw error;
         res.json(results);
+    });
+});
+
+// Limpar todo carrinho do usuário em específico
+app.delete('/cartUser/:id_usuario', (req, res) => {
+    const { id_usuario } = req.params;
+    lojaHardwareCONN.query('DELETE FROM carrinho_hardware WHERE id_usuario = ?', [id_usuario], (error, results) => {
+        if (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Erro ao remover itens do carrinho' });
+            return;
+        }
+        res.json({ message: 'Todos os itens removidos do carrinho para o usuário' });
     });
 });
 

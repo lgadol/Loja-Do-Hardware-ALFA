@@ -63,6 +63,15 @@
     display: flex;
 }
 
+.empty_cart_div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #808080;
+    height: 80vh;
+}
+
 /* Página Login */
 
 
@@ -92,5 +101,15 @@
 
 .input_group input {
     margin-left: 10px;
-    width: 300px; /* Ajuste este valor conforme necessário */
+    width: 300px;
+    /* Ajuste este valor conforme necessário */
+}
+
+/* Página Payment */
+
+.payment_div {}
+
+.payment_div span {
+    font-size: 80px;
+    color: green;
 }

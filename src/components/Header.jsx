@@ -20,6 +20,7 @@ export const Header = () => {
 
     return (
         <div className='header_div'>
+            <h1 className='loja_do_hardware_h1'>Loja do Hardware</h1>
             <Link to="/"><FaStore /> Loja</Link>
             <Link to="/cart"><FaShoppingCart /> Carrinho</Link>
             {userName ? (
@@ -30,7 +31,7 @@ export const Header = () => {
                         {isAdmin === '1' ? <FaCrown color='yellow' /> : <FaUser color='white' />}
                         {" "} <Link to="/profile">{userName}</Link>
                     </p>
-                    <a className='exit_p' onClick={handleLogout}><FaSignOutAlt color='red'/> Sair</a>
+                    <a className='exit_p' onClick={handleLogout}><FaSignOutAlt color='red' /> Sair</a>
                 </>
             ) : (
                 <Link to="/login"><FaSignInAlt /> Entrar</Link>

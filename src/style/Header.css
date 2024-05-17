@@ -22,3 +22,18 @@ a:hover {
     color: red;
     cursor: pointer;
 }
+
+.loja_do_hardware_h1 {
+    color: white;
+    width: 150px;
+    text-align: left;
+    margin-bottom: 0;
+    margin-left: 0;
+    font-size: 25px;
+}
+
+@media (max-width: 539px) {
+    .loja_do_hardware_h1 {
+        font-size: 15px;
+    }
+}

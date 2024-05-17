@@ -11,7 +11,7 @@ const CartRoute = ({ component: Component, ...rest }) => {
         isAuthenticated ? (
           <Component {...props} />
         ) : (
-          alert('Você precisa estar logado para acessar o carrinho de compras.'),
+          alert('Você precisa estar logado para acessar.'),
           <Redirect to="/login" />
         )
       }
