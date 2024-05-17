@@ -2,15 +2,16 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const { createConnection } = require('mysql2');
+require('dotenv').config();
 
 app.use(cors());
 app.use(express.json());
 
 const lojaHardwareCONN = createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'admin',
-    database: 'loja_do_hardware'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
 
 //Consulta para produtos ativos
