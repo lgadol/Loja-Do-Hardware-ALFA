@@ -167,6 +167,17 @@ app.get('/cart/:id_usuario', (req, res) => {
     });
 });
 
+// Inserir um novo produto
+app.post('/addProduct', (req, res) => {
+    const { nome, descricao, preco, imagem_url } = req.body;
+    const queryInsert = 'INSERT INTO produtos_hardware (nome, descricao, preco, imagem_url) VALUES (?, ?, ?, ?)';
+    lojaHardwareCONN.query(queryInsert, [nome, descricao, preco, imagem_url], (error, results) => {
+        if (error) throw error;
+        res.json({ message: 'Produto inserido com sucesso' });
+    });
+});
+
+
 // Desativar um produto
 app.put('/product/:id', (req, res) => {
     const { id } = req.params;
