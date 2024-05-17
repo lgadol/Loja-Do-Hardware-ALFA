@@ -7,7 +7,7 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 70px;
-    margin-top: 30px;
+    margin-top: 50px;
 }
 
 .product_div {
@@ -19,6 +19,24 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
+}
+
+.add_product_div {
+    color: white;
+    background-color: green;
+    cursor: pointer;
+    width: 170px;
+    height: 30px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius: 20px;
+    position: fixed;
+    right: 0;
+}
+
+.add_product_div a {
+    text-decoration: none;
 }
 
 .img_product {
@@ -47,8 +65,32 @@
 
 /* Página Login */
 
+
 /* Página Profile */
 
 .profile_information_div {}
 
-.profile_editing_div {}
+.profile_editing_div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Página Product */
+
+.edit_product_div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input_group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.input_group input {
+    margin-left: 10px;
+    width: 300px; /* Ajuste este valor conforme necessário */
+}

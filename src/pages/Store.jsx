@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { BsFillCartPlusFill, BsTrash3Fill } from 'react-icons/bs';
+import { BsFillCartPlusFill, BsTrash3Fill, BsPlusCircle } from 'react-icons/bs';
 import { getItem, setItem } from '../services/LocalStorageFuncs';
+import { Link } from 'react-router-dom';
 import { Header } from '../components/Header';
 import '../style/Global.css';
 import { toast } from 'react-toastify';
@@ -86,6 +87,13 @@ export const Store = () => {
     return (
         <div>
             <Header />
+            {localStorage.getItem('isAdmin') === '1' &&
+                <div className='add_product_div'>
+                    <Link to="/product">
+                        <p><BsPlusCircle /> Adicionar produto</p>
+                    </Link>
+                </div>
+            }
             <div className='product_area'>
                 {
                     data.map((e) => (

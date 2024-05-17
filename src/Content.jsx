@@ -6,6 +6,7 @@ import LoginRoute from './LoginRoute';
 import { Store } from "./pages/Store";
 import { Cart } from "./pages/Cart";
 import { Profile } from "./pages/Profile";
+import { Product } from "./pages/Product";
 import { Login } from "./Login";
 
 export const Content = () => {
@@ -14,6 +15,7 @@ export const Content = () => {
             <Route exact path='/' component={Store} />
             <CartRoute exact path='/cart' component={Cart} />
             <ProtectedRoute exact path='/profile' component={Profile} />
+            <ProtectedRoute exact path='/product' component={Product} />
             <LoginRoute exact path='/login' component={Login} />
         </Switch>
     )
