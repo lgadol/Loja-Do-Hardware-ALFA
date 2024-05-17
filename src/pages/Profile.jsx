@@ -25,7 +25,7 @@ export const Profile = () => {
         }
 
         fetchUser();
-    }, []);
+    }, [isEditing]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
